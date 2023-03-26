@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "409377374598",
+    "project_id": "hbalert",
+    "storage_bucket": "hbalert.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:409377374598:android:3dd5cf3ecb6cfebfb2ec07",
+        "android_client_info": {
+          "package_name": "com.smart.hbalert"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "409377374598-ns5jb518ik4vrtuph3job8s0m4se2vpc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE8huiJDm6M-RaNBBLrT7kA6eqQSMvPdA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "409377374598-ns5jb518ik4vrtuph3job8s0m4se2vpc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

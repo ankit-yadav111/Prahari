@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:background="@drawable/background_grd"
+    tools:context=".MainActivity">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/wlc"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:cardBackgroundColor="#49B7C5">
+    <TextView
+        android:id="@+id/welcome"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-smallcaps"
+        android:layout_gravity="center"
+        android:text="@string/welcome"
+        android:layout_marginStart="15dp"
+        android:textAllCaps="true"
+        android:textColor="#DF4C4C"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+    </androidx.cardview.widget.CardView>
+    <ImageView
+        android:layout_below="@+id/wlc"
+        android:id="@+id/name_logo"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="25dp"
+        android:src="@drawable/dark_green_and_light_green_modern_gradient_health_products_health_logo" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/contact"
+        android:layout_below="@+id/name_logo"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:cardCornerRadius="12dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="25dp"
+        app:cardBackgroundColor="#D5A9BD">
+
+        <Button
+            android:id="@+id/addContacts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="@string/add_contact"
+            android:textSize="15sp"
+            android:padding="12dp"
+            android:textStyle="bold"
+            android:background="@android:color/transparent"
+            android:textColor="#000"/>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/alert"
+        android:layout_below="@+id/contact"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:cardCornerRadius="12dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="25dp"
+        app:cardBackgroundColor="#D5A9BD">
+
+        <Button
+            android:id="@+id/enableAlert"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@android:color/transparent"
+            android:gravity="center"
+            android:padding="12dp"
+            android:text="@string/enable_alert"
+            android:textColor="#000"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_below="@+id/alert"
+        android:id="@+id/sos"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:cardCornerRadius="12dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="25dp"
+        app:cardBackgroundColor="#D5A9BD">
+
+        <Button
+            android:id="@+id/sosMode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="@string/sos_mode"
+            android:textSize="15sp"
+            android:padding="12dp"
+            android:textStyle="bold"
+            android:background="@android:color/transparent"
+            android:textColor="#000"/>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_below="@+id/sos"
+        android:id="@+id/pair"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:cardCornerRadius="12dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="25dp"
+        app:cardBackgroundColor="#D5A9BD">
+
+        <Button
+            android:id="@+id/PairSmartBand"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="@string/pair_watch"
+            android:textSize="15sp"
+            android:padding="12dp"
+            android:textStyle="bold"
+            android:background="@android:color/transparent"
+            android:textColor="#000"/>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/settings"
+        android:layout_below="@+id/pair"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:cardCornerRadius="12dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="25dp"
+        app:cardBackgroundColor="#D5A9BD">
+
+        <Button
+            android:id="@+id/Setting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="@string/setting"
+            android:textSize="15sp"
+            android:padding="12dp"
+            android:textStyle="bold"
+            android:background="@android:color/transparent"
+            android:textColor="#000"/>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

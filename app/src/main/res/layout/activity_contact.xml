@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:background="@drawable/background_grd"
+    android:padding="8dp"
+    tools:context=".ContactActivity">
+
+    <TextView
+        android:id="@+id/contact"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Contacts"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-smallcaps"
+        android:textSize="24sp"
+        android:textColor="#fff"
+        android:textAllCaps="true"
+        android:gravity="center"
+        />
+
+    <ImageView
+        android:id="@+id/kuch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/contact"
+        android:layout_marginLeft="-50dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/line_below_crt_txt" />
+`
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/nameLayout"
+        android:layout_below="@id/contact"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColorHint="#fff"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginTop="30dp"
+        android:hint=" Name"
+        android:inputType="text"
+        app:helperText="Required*"
+        app:helperTextTextColor="#EC0A0A"
+        app:endIconMode="clear_text"
+        android:textSize="18sp">
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:id="@+id/nameField"
+            android:textColor="#fff"
+            android:inputType="textPersonName"
+            android:drawableStart="@drawable/ic_baseline_person_24"
+            android:layout_height="match_parent"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/numberLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/nameLayout"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginTop="10dp"
+        android:hint=" Number"
+        android:textColorHint="#fff"
+        android:textSize="18sp"
+        app:endIconMode="clear_text"
+        app:helperText="Required*"
+        app:helperTextTextColor="#EC0A0A">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/numberField"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:drawableStart="@drawable/ic_baseline_phone_24"
+            android:inputType="number"
+            android:textColor="#fff"
+            android:maxLength="10" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/submitLayout"
+        android:layout_below="@id/numberLayout"
+        android:layout_width="match_parent"
+        android:layout_height="39dp"
+        android:layout_marginTop="29dp"
+        app:cardCornerRadius="9dp"
+        app:cardBackgroundColor="#DCCBFF">
+
+        <Button
+            android:id="@+id/submitButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="Submit"
+            android:textSize="15sp"
+            android:background="@android:color/transparent"
+            android:textColor="#000"/>
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/submitLayout"
+        android:layout_marginTop="20dp"
+        tools:listitem="@layout/recycler_element" />
+
+</RelativeLayout>

@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Prahari</string>
+    <string name="create_account">Create Account</string>
+    <string name="login">Login</string>
+    <string name="name">Name</string>
+    <string name="mobile">Mobile</string>
+    <string name="Password">Password</string>
+    <string name="confirm_password"> Confirm Password</string>
+    <string name="otp">Enter Otp</string>
+    <string name="already_have_account">Already Have An Account</string>
+    <string name="enter_otp">Enter OTP</string>
+    <string name="verify_account">Verify Account</string>
+    <string name="verify">Verify</string>
+    <string name="login_account">Login Account</string>
+    <string name="register">Register</string>
+    <string name="do_not_have_account">Don\'t Have An Account</string>
+    <string name="resend_otp">Resend OTP</string>
+    <string name="send_otp">Send OTP</string>
+    <string name="forget_password">Forget Password</string>
+    <string name="change_password">Change Password</string>
+    <string name="wrong_number">Invalid Mobile Number</string>
+    <string name="wrong_password">Wrong Password</string>
+    <string name="password_not_match">Passwords Doesn\'t Match</string>
+    <string name="short_password">Password is too short</string>
+    <string name="blank_input">Please Enter Your Name</string>
+    <string name="wrong_number_password">Wrong Number/Password</string>
+    <string name="wrong_input">Invalid Input</string>
+    <string name="resend_otp_time">You can resend otp in </string>
+    <string name="welcome">Welcome</string>
+    <string name="add_contact">Add Emergency Contacts</string>
+    <string name="enable_alert">Enable Alert</string>
+    <string name="sos_mode">SOS Mode</string>
+    <string name="setting">Setting</string>
+    <string name="pair_watch">Pair SmartBand</string>
+</resources>

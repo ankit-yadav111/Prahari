@@ -121,8 +121,6 @@ class SendOtp : AppCompatActivity() {
         .setCallbacks(callbacks)          // OnVerificationStateChangedCallbacks
         .build()
         PhoneAuthProvider.verifyPhoneNumber(options)
-
-
     }
 
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
@@ -131,17 +129,14 @@ class SendOtp : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     if (mode=="create"){
-                        Log.d("Ankit","AAOkay")
                         startActivity(Intent(this,MainActivity::class.java))
                         finish()
                     }
                     else{
-                        Log.d("Ankit","Forget")
                         startActivity(Intent(this,ChangePassword::class.java))
                         finish()
                     }
                 } else {
-                    // Sign in failed, display a message and update the UI
                     if (task.exception is FirebaseAuthInvalidCredentialsException) {
                         binding.warning.text=getString(R.string.wrong_input)
                         Toast.makeText(this,"Invalid Code",Toast.LENGTH_LONG).show()
@@ -150,17 +145,4 @@ class SendOtp : AppCompatActivity() {
                 }
             }
     }
-
-//    private fun verifyOtp(){
-//        val otp= binding.otp.text.toString()
-//
-//        //Verify the generated Otp
-//        if (otp==genOtp){
-//            startActivity(Intent(this, MainActivity::class.java))
-//            finsih()
-//        }
-//        else{
-//            binding.warning.text=getString(R.string.wrong_input)
-//        }
-//    }
 }

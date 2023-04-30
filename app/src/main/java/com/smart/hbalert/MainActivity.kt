@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     var locationManager: LocationManager? = null
     var latitude = 0.0
     var longitude = 0.0
-    var flag=0
+    private var flag=0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +55,10 @@ class MainActivity : AppCompatActivity() {
             0, 10f, locationListenerGPS
         )}
 
+        binding.login.setOnClickListener{
+            startActivity(Intent(this,LoginActivity::class.java))
+        }
+
         binding.addContacts.setOnClickListener{
             startActivity(Intent(this,ContactActivity::class.java))
         }
@@ -68,12 +72,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.Setting.setOnClickListener{
-            TODO("Think about this")
+            Toast.makeText(this,"Setting",Toast.LENGTH_SHORT).show()
 //            startActivity(Intent,SettingActivity::class.java)
         }
 
         binding.PairSmartBand.setOnClickListener{
-            TODO("Not Yet Implemented")
+            Toast.makeText(this,"Connect With Your SmartBand",Toast.LENGTH_SHORT).show()
         }
 
     }
@@ -88,7 +92,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun enabledAlert() {
-        TODO("Not yet implemented")
+        Toast.makeText(this,"Enabled Alert",Toast.LENGTH_SHORT).show()
     }
 
 
@@ -143,6 +147,7 @@ class MainActivity : AppCompatActivity() {
             flag=1
         }
         else{
+            Toast.makeText(this,"Permission Denied",Toast.LENGTH_SHORT).show()
             flag=0
             finish()
         }

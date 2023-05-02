@@ -34,14 +34,14 @@ class ChangePassword : AppCompatActivity() {
 
 
         binding.passImg.setOnClickListener{
-            visible = if(visible==1){
+            visible = if(visible==0){
                 binding.password.transformationMethod= HideReturnsTransformationMethod.getInstance()
                 binding.passImg.setImageResource(R.drawable.ic_baseline_remove_red_eye_24)
-                0
+                1
             } else{
                 binding.password.transformationMethod= PasswordTransformationMethod.getInstance()
                 binding.passImg.setImageResource(R.drawable.ic_baseline_visibility_off_24)
-                1
+                0
             }
         }
     }

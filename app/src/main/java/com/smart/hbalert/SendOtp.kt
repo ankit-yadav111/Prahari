@@ -18,16 +18,17 @@ import com.google.firebase.ktx.Firebase
 import com.smart.hbalert.databinding.ActivityOptVerifyBinding
 import java.util.concurrent.TimeUnit
 
+
 class SendOtp : AppCompatActivity() {
 
     private lateinit var binding: ActivityOptVerifyBinding
     private lateinit var auth: FirebaseAuth
-    private var verifiId:String?=null
+    private var verifyId:String?=null
     private var flag=true
     private var mode="create"
     private var secondsRemaining = 60
     private val handler = Handler(Looper.getMainLooper())
-    lateinit var runnable: Runnable
+    private lateinit var runnable: Runnable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,13 +59,16 @@ class SendOtp : AppCompatActivity() {
             }
         }
 
-        val mobile=intent.getStringExtra("mobile")
+        val mobile= intent.getStringExtra("mobile")
         mode= intent.getStringExtra("loc").toString()
         if(flag) {
             sendOtp(mobile.toString())
             flag = false
         }
-        binding.resend.setOnClickListener{sendOtp(mobile.toString())}
+        binding.resend.setOnClickListener{
+            binding.warning.text=getString(R.string.wrong_input)
+            sendOtp(mobile.toString())
+        }
         binding.verify.setOnClickListener{
             // This code goes inside the onClick method of your submit button
             val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -75,9 +79,7 @@ class SendOtp : AppCompatActivity() {
                 binding.warning.text=getString(R.string.wrong_input)
             }
             else{
-            val credential = PhoneAuthProvider.getCredential(verifiId!!, genOtp)
-            Log.d("Ankit","Cred:  $credential")
-            Log.d("Ankit","Code:  $verifiId")
+            val credential = PhoneAuthProvider.getCredential(verifyId!!, genOtp)
             signInWithPhoneAuthCredential(credential)
             }
         }
@@ -95,7 +97,6 @@ class SendOtp : AppCompatActivity() {
             // 2 - Auto-retrieval. On some devices Google Play services can automatically
             //     detect the incoming verification SMS and perform verification without
             //     user action.
-//            Log.d("Ankit", "Verified $credential")
                 signInWithPhoneAuthCredential(credential)
         }
 
@@ -108,8 +109,7 @@ class SendOtp : AppCompatActivity() {
             token: PhoneAuthProvider.ForceResendingToken
         ) {
             // Save verification ID and resending token so we can use them later
-            verifiId = verificationId
-            Log.d("Ankit","Code ki baat ho rahi h "+verifiId.toString())
+            verifyId = verificationId
         }
 
     }
@@ -129,8 +129,7 @@ class SendOtp : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     if (mode=="create"){
-                        startActivity(Intent(this,MainActivity::class.java))
-                        finish()
+                        createAccount(intent.getStringExtra("mobile").toString(),intent.getStringExtra("pass").toString())
                     }
                     else{
                         startActivity(Intent(this,ChangePassword::class.java))
@@ -141,7 +140,22 @@ class SendOtp : AppCompatActivity() {
                         binding.warning.text=getString(R.string.wrong_input)
                         Toast.makeText(this,"Invalid Code",Toast.LENGTH_LONG).show()
                     }
-                    // Update UI
+                }
+            }
+    }
+
+    private fun createAccount(phoneNumber: String, password: String) {
+        // Create a new user with the provided email and password
+        auth.createUserWithEmailAndPassword("$phoneNumber@example.com", password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(this,"Account created successfully.", Toast.LENGTH_SHORT).show()
+                    // Redirect to the main activity
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    Toast.makeText(this, "Account creation failed.", Toast.LENGTH_SHORT).show()
                 }
             }
     }

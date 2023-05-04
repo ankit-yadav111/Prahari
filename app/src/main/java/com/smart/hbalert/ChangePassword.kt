@@ -6,8 +6,11 @@ import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
 import com.smart.hbalert.databinding.ActivityChangePasswordBinding
+
 
 class ChangePassword : AppCompatActivity() {
 
@@ -46,14 +49,24 @@ class ChangePassword : AppCompatActivity() {
         }
     }
 
+
     private fun changePassword(pass:String, conPass:String){
         if (pass.length>5){
             if (conPass.length>5 && pass==conPass){
 
                 //Change the Password in Database
+                val user = FirebaseAuth.getInstance().currentUser
 
-                startActivity(Intent(this,LoginActivity::class.java))
-                finish()
+                user?.updatePassword(pass)?.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        // Password updated successfully
+                        startActivity(Intent(this, LoginActivity::class.java))
+                        finish()
+                    } else {
+                        // An error occurred
+                        Toast.makeText(this,"Error Occurred",Toast.LENGTH_LONG).show()
+                    }
+                }
             }
             else{
                 binding.warning.text=getString(R.string.password_not_match)

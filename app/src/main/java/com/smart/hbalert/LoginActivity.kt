@@ -14,6 +14,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.smart.hbalert.databinding.ActivityLoginBinding
 
+
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
@@ -42,12 +43,12 @@ class LoginActivity : AppCompatActivity() {
             finish()
         }
 
-        //Forget Passwod Activity
+        //Forget Password Activity
         binding.forgetPassword.setOnClickListener{
             startActivity(Intent(this,ForgetPasswordActivity::class.java))
         }
 
-        //Password Visiblity and Hiding
+        //Password Visible and Hiding
         binding.passImg.setOnClickListener{
             visible = if(visible==0){
                 binding.password.transformationMethod=HideReturnsTransformationMethod.getInstance()
@@ -65,12 +66,27 @@ class LoginActivity : AppCompatActivity() {
     private fun loginAccount(mobile:String, pass:String) {
         if (mobile.length!=10 && mobile.isDigitsOnly()){
             //Check the Password in database
-            binding.warning.text= getString(R.string.wrong_number_password)
+            Toast.makeText(this,"Enter valid number",Toast.LENGTH_LONG).show()
         }
         else{
-            val intent =Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
+            signIn(mobile,pass)
         }
+    }
+
+    private fun signIn(phoneNumber: String, password: String) {
+        // Sign in the user with the provided email and password
+        auth.signInWithEmailAndPassword("$phoneNumber@example.com", password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(this, "Sign in successful.", Toast.LENGTH_SHORT).show()
+                    // Redirect to the main activity
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                } else {
+                    Toast.makeText(this, "Sign in failed.", Toast.LENGTH_SHORT).show()
+                    binding.warning.text= getString(R.string.wrong_number_password)
+                }
+            }
     }
 }

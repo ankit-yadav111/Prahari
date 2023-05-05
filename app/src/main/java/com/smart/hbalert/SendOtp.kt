@@ -1,5 +1,7 @@
 package com.smart.hbalert
 
+import android.R.attr.password
+import android.R.attr.phoneNumber
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -16,6 +18,8 @@ import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.smart.hbalert.databinding.ActivityOptVerifyBinding
+import com.smart.hbalert.doa.UserDoa
+import com.smart.hbalert.model.User
 import java.util.concurrent.TimeUnit
 
 
@@ -58,7 +62,9 @@ class SendOtp : AppCompatActivity() {
                 }
             }
         }
-
+        binding.otp.setOnClickListener{
+            binding.warning.text=""
+        }
         val mobile= intent.getStringExtra("mobile")
         mode= intent.getStringExtra("loc").toString()
         if(flag) {
@@ -66,7 +72,7 @@ class SendOtp : AppCompatActivity() {
             flag = false
         }
         binding.resend.setOnClickListener{
-            binding.warning.text=getString(R.string.wrong_input)
+            binding.warning.text=""
             sendOtp(mobile.toString())
         }
         binding.verify.setOnClickListener{
@@ -129,10 +135,12 @@ class SendOtp : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     if (mode=="create"){
-                        createAccount(intent.getStringExtra("mobile").toString(),intent.getStringExtra("pass").toString())
+                        createAccount()
                     }
                     else{
-                        startActivity(Intent(this,ChangePassword::class.java))
+                        val intent=Intent(this, MainActivity::class.java)
+                        intent.putExtra("mobile",intent.getStringExtra("mobile"))
+                        startActivity(intent)
                         finish()
                     }
                 } else {
@@ -144,18 +152,30 @@ class SendOtp : AppCompatActivity() {
             }
     }
 
-    private fun createAccount(phoneNumber: String, password: String) {
-        // Create a new user with the provided email and password
-        auth.createUserWithEmailAndPassword("$phoneNumber@example.com", password)
-            .addOnCompleteListener(this) { task ->
+    private fun createAccount(){
+        val name= intent.getStringExtra("name")
+        val mobile=intent.getStringExtra("mobile")
+        val userName=intent.getStringExtra("user")
+        val email=intent.getStringExtra("email")
+        val  user= auth.currentUser?.uid.toString()
+        auth.createUserWithEmailAndPassword("$mobile@alert.com", "123456")
+            .addOnCompleteListener(
+                this
+            ) { task ->
                 if (task.isSuccessful) {
                     Toast.makeText(this,"Account created successfully.", Toast.LENGTH_SHORT).show()
                     // Redirect to the main activity
-                    val intent = Intent(this, MainActivity::class.java)
+                    // Save all the user information
+                    val user = User(user,name,userName.toString(), mobile.toString(),email.toString())
+                    UserDoa().addUser(user)
+                    val intent=Intent(this, MainActivity::class.java)
+                    intent.putExtra("mobile",mobile)
                     startActivity(intent)
                     finish()
                 } else {
+                    Log.d("Ankit",task.exception.toString())
                     Toast.makeText(this, "Account creation failed.", Toast.LENGTH_SHORT).show()
+                    auth.signOut()
                 }
             }
     }

@@ -3,17 +3,17 @@ package com.smart.hbalert
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.method.HideReturnsTransformationMethod
-import android.text.method.PasswordTransformationMethod
+import android.util.Log
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.isDigitsOnly
+import com.google.firebase.auth.FirebaseAuth
 import com.smart.hbalert.databinding.ActivityCreateAccountBinding
 
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCreateAccountBinding
-    private var visible=0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,48 +25,60 @@ class RegisterActivity : AppCompatActivity() {
             finish()
         }
 
+        binding.mobile.setOnClickListener{
+            binding.warning.text=""
+        }
+        binding.email.setOnClickListener{
+            binding.warning.text=""
+        }
+        binding.name.setOnClickListener{
+            binding.warning.text=""
+        }
+        binding.userName.setOnClickListener{
+            binding.warning.text=""
+        }
+
         //click on submit button
         binding.submit.setOnClickListener{
             val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
             createAccount()
         }
-
-        //Password Visiblity and Hiding
-        binding.passImg.setOnClickListener{
-            visible = if(visible==0){
-                binding.password.transformationMethod= HideReturnsTransformationMethod.getInstance()
-                binding.passImg.setImageResource(R.drawable.ic_baseline_remove_red_eye_24)
-                1
-            } else{
-                binding.password.transformationMethod= PasswordTransformationMethod.getInstance()
-                binding.passImg.setImageResource(R.drawable.ic_baseline_visibility_off_24)
-                0
-            }
-        }
     }
 
     private fun createAccount(){
         val name=binding.name.text.toString()
         val mobile=binding.mobile.text.toString()
-        val pass=binding.password.text.toString()
-        val passCon=binding.confirmPassword.text.toString()
+        val email=binding.email.text.toString()
+        val userName=binding.userName.text.toString()
         if (name!=""){
             if (mobile.length==10 && mobile.isDigitsOnly()){
-                if (pass.length>5){
-                    if (passCon.length>5 && pass==passCon){
-
+                if (email!=""){
+                    if (userName!=""){
                         //Check the Mobile number in data base
+                        FirebaseAuth.getInstance().fetchSignInMethodsForEmail("$mobile@alert.com")
+                            .addOnCompleteListener { task ->
+                                if (task.isSuccessful) {
+                                    val result = task.result
+                                    if (result != null && result.signInMethods != null && result.signInMethods!!.isNotEmpty()) {
+                                        binding.warning.text=getString(R.string.already_have_account)
+                                    } else {
 
-                        sendOtp(mobile,name,pass)
-
+                                        sendOtp(mobile,name,email,userName.lowercase())
+                                    }
+                                } else {
+                                    // Error occurred while checking if user exists
+                                    Log.d("Ankit",task.exception.toString())
+                                    Toast.makeText(this, "Error Occurred", Toast.LENGTH_LONG).show()
+                                }
+                            }
                     }
                     else{
-                        binding.warning.text=getString(R.string.password_not_match)
+                        binding.warning.text=getString(R.string.userName)
                     }
                 }
                 else{
-                    binding.warning.text=getString(R.string.short_password)
+                    binding.warning.text=getString(R.string.email)
                 }
             }
             else{
@@ -78,12 +90,13 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    private fun sendOtp(mobile:String,name:String,password:String){
+    private fun sendOtp(mobile:String,name:String,email:String,userName:String){
         val intent= Intent(this,SendOtp::class.java)
         intent.putExtra("mobile",mobile)
         intent.putExtra("loc","create")
-        intent.putExtra("pass",password)
+        intent.putExtra("email",email)
         intent.putExtra("name",name)
+        intent.putExtra("user",userName)
         startActivity(intent)
         finish()
     }

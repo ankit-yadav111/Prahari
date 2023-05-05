@@ -32,16 +32,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ChangePassword"
-            android:exported="false"/>
-        <activity
             android:name=".LoginActivity"
             android:exported="false"/>
         <activity
             android:name=".RegisterActivity"
-            android:exported="false"/>
-        <activity
-            android:name=".ForgetPasswordActivity"
             android:exported="false"/>
         <activity
             android:name=".SendOtp"

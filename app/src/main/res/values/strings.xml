@@ -2,10 +2,10 @@
     <string name="app_name">Prahari</string>
     <string name="create_account">Create Account</string>
     <string name="login">Login</string>
-    <string name="name">Name</string>
+    <string name="name">Full Name</string>
     <string name="mobile">Mobile</string>
-    <string name="Password">Password</string>
-    <string name="confirm_password"> Confirm Password</string>
+    <string name="email">Email</string>
+    <string name="nickname"> Username</string>
     <string name="otp">Enter Otp</string>
     <string name="already_have_account">Already Have An Account</string>
     <string name="enter_otp">Enter OTP</string>
@@ -19,8 +19,8 @@
     <string name="forget_password">Forget Password</string>
     <string name="change_password">Change Password</string>
     <string name="wrong_number">Invalid Mobile Number</string>
-    <string name="wrong_password">Wrong Password</string>
-    <string name="password_not_match">Passwords Doesn\'t Match</string>
+    <string name="invalid_email">Enter Valid Email</string>
+    <string name="userName">Please Enter Username</string>
     <string name="short_password">Password is too short</string>
     <string name="blank_input">Please Enter Your Name</string>
     <string name="wrong_number_password">Wrong Number/Password</string>

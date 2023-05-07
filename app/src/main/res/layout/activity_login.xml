@@ -43,7 +43,7 @@
         android:layout_height="match_parent"
         android:layout_marginHorizontal="20dp"
         android:layout_below="@id/login_account"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="50dp"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -73,33 +73,6 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/edittext_background">
-
-            <EditText
-                android:id="@+id/password"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:textColor="#fff"
-                android:layout_marginStart="12dp"
-                android:background="@android:color/transparent"
-                android:hint="@string/Password"
-                android:inputType="textPassword"
-                android:textColorHint="#A5A5A5" />
-
-            <ImageView
-                android:id="@+id/passImg"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="3dp"
-                android:padding="7dp"
-                android:src="@drawable/ic_baseline_visibility_off_24" />
-
-        </RelativeLayout>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -120,27 +93,6 @@
                 android:textStyle="bold"
                 android:textSize="15sp" />
         </androidx.cardview.widget.CardView>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
-
-            <TextView
-                android:id="@+id/forgetPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:textSize="15sp"
-                android:text="@string/forget_password"
-                android:textColor="#fff" />
-
-        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"

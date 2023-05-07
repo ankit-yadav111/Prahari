@@ -55,6 +55,8 @@ class ContactActivity : AppCompatActivity() {
             binding.numberLayout.error = "Wrong Input"
         }
         else{
+            binding.nameField.setText("")
+            binding.numberField.setText("")
             insertData(name,number)
         }
     }

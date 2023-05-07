@@ -1,6 +1,7 @@
 package com.smart.hbalert
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
@@ -19,6 +20,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.smart.hbalert.contact.ContactViewModel
 import com.smart.hbalert.databinding.ActivityMainBinding
+import com.smart.hbalert.doa.UserDoa
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,6 +39,18 @@ class MainActivity : AppCompatActivity() {
 
         auth = Firebase.auth
 
+        val mobile=intent.getStringExtra("mobile")
+
+        val user=auth.currentUser
+        if(user!=null) {
+            val data = UserDoa().getUserById(mobile.toString())
+            data.addOnSuccessListener { document ->
+                if (document != null) {
+                    val name = document.get("userName").toString().replaceFirstChar { it.uppercase() }
+                    binding.welcome.text="Welcome $name"
+                }
+            }
+        }
         viewModel= ViewModelProvider(this,
             ViewModelProvider.AndroidViewModelFactory.getInstance(application))[ContactViewModel::class.java]
 
@@ -56,7 +70,8 @@ class MainActivity : AppCompatActivity() {
         )}
 
         binding.login.setOnClickListener{
-            startActivity(Intent(this,LoginActivity::class.java))
+            auth.signOut()
+            onStart()
         }
 
         binding.addContacts.setOnClickListener{
@@ -83,7 +98,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun sosMode() {
-        if (fetchSize()){
+        if (!fetchSize()){
             sendMessage()
         }
         else{
@@ -104,12 +119,13 @@ class MainActivity : AppCompatActivity() {
                 n=list.size
             }
         })
-        return n>0
+        return n==0
     }
 
     // Send the Emergency
     private fun sendMessage(){
-        val smsManager= SmsManager.getDefault()
+        val context: Context = this // or getApplicationContext()
+        val smsManager = context.getSystemService(SmsManager::class.java)
         val strUri = "http://maps.google.com/maps?q=loc:$latitude,$longitude (Help!)"
         viewModel.allCont.observe(this,  Observer{list->
             list?.let {

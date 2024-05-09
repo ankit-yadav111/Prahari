@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:background="@drawable/background_grd"
+    android:padding="8dp"
+    tools:context=".WatchActivity">
+
+    <TextView
+        android:id="@+id/contact"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Connect To Smart Watch"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-smallcaps"
+        android:textSize="24sp"
+        android:textColor="#fff"
+        android:textAllCaps="true"
+        android:gravity="center"
+        />
+
+    <ImageView
+        android:id="@+id/kuch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/contact"
+        android:layout_marginLeft="-50dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/line_below_crt_txt" />
+
+    <TextView
+        android:id="@+id/data"
+        android:layout_marginTop="-150dp"
+        android:layout_below="@+id/kuch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Heart Rate Data:"
+        android:textSize="20sp"
+        android:layout_marginStart="10dp"
+        android:textColor="#fff"
+        android:gravity="left"
+        tools:ignore="RtlHardcoded" />
+    <TextView
+        android:id="@+id/heartRate"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/data"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="20sp"
+        android:layout_marginStart="10dp"
+        android:textColor="#C1B2B2"
+        android:gravity="left"
+        tools:ignore="RtlHardcoded" />
+</RelativeLayout>

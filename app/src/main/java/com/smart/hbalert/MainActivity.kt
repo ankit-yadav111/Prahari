@@ -9,12 +9,15 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.telephony.SmsManager
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.fitness.FitnessOptions
+import com.google.android.gms.fitness.data.DataType
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -47,26 +50,31 @@ class MainActivity : AppCompatActivity() {
             data.addOnSuccessListener { document ->
                 if (document != null) {
                     val name = document.get("userName").toString().replaceFirstChar { it.uppercase() }
-                    binding.welcome.text="Welcome $name"
+                    if(name!=null)
+                        binding.welcome.text = "Welcome"
+                    binding.welcome.text="Welcome"
                 }
             }
         }
+
         viewModel= ViewModelProvider(this,
             ViewModelProvider.AndroidViewModelFactory.getInstance(application))[ContactViewModel::class.java]
 
-        if((ContextCompat.checkSelfPermission(this,Manifest.permission.RECORD_AUDIO)!= PackageManager.PERMISSION_GRANTED)
+        if((ContextCompat.checkSelfPermission(this,Manifest.permission.ACTIVITY_RECOGNITION)!= PackageManager.PERMISSION_GRANTED)
             &&(ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) &&
             (ContextCompat.checkSelfPermission(
                   this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)&&
-            (ContextCompat.checkSelfPermission(this,Manifest.permission.CAMERA)!= PackageManager.PERMISSION_GRANTED))
+            (ContextCompat.checkSelfPermission(this,Manifest.permission.BODY_SENSORS)!= PackageManager.PERMISSION_GRANTED))
         {
             checkPermission()
+        }else{
+            flag=1
         }
         if (flag==1){
-        locationManager = this.getSystemService(LOCATION_SERVICE) as LocationManager
-        locationManager!!.requestLocationUpdates(
-            LocationManager.GPS_PROVIDER,
-            0, 10f, locationListenerGPS
+            locationManager = this.getSystemService(LOCATION_SERVICE) as LocationManager
+            locationManager!!.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                0, 10f, locationListenerGPS
         )}
 
         binding.login.setOnClickListener{
@@ -87,13 +95,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.Setting.setOnClickListener{
-            Toast.makeText(this,"Setting",Toast.LENGTH_SHORT).show()
-//            startActivity(Intent,SettingActivity::class.java)
+            startActivity(Intent(this,SettingsActivity::class.java))
         }
 
         binding.PairSmartBand.setOnClickListener{
-            Toast.makeText(this,"Connect With Your SmartBand",Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this,WatchActivity::class.java))
         }
+
+        fetchSize()
 
     }
 
@@ -147,7 +156,7 @@ class MainActivity : AppCompatActivity() {
     private fun checkPermission() {
         ActivityCompat.requestPermissions(
             this, arrayOf(Manifest.permission.SEND_SMS,Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.CAMERA,Manifest.permission.RECORD_AUDIO),
+                Manifest.permission.BODY_SENSORS,Manifest.permission.ACTIVITY_RECOGNITION),
             RequestCode
         )
     }

@@ -1,6 +1,14 @@
 {
+  "installed": {
+  "client_id": "409377374598-lmboijm3a1mb94kfl4as547bt9g9rvqn.apps.googleusercontent.com",
+  "project_id": "hbalert",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs"
+},
   "project_info": {
     "project_number": "409377374598",
+    "firebase_url": "https://hbalert-default-rtdb.firebaseio.com",
     "project_id": "hbalert",
     "storage_bucket": "hbalert.appspot.com"
   },

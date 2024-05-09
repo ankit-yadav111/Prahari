@@ -1,7 +1,5 @@
 package com.smart.hbalert
 
-import android.R.attr.password
-import android.R.attr.phoneNumber
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -107,7 +105,6 @@ class SendOtp : AppCompatActivity() {
         }
 
         override fun onVerificationFailed(e: FirebaseException) {
-            Log.d("Ankit",e.toString())
         }
 
         override fun onCodeSent(
@@ -119,14 +116,15 @@ class SendOtp : AppCompatActivity() {
         }
 
     }
+        val formattedPhoneNumber = "+91$mobile".replace("\\s+".toRegex(), "")
 
-    val options = PhoneAuthOptions.newBuilder(auth)
-        .setPhoneNumber("+91$mobile")       // Phone number to verify
-        .setTimeout(60, TimeUnit.SECONDS) // Timeout and unit
-        .setActivity(this)                 // Activity (for callback binding)
-        .setCallbacks(callbacks)          // OnVerificationStateChangedCallbacks
-        .build()
-        PhoneAuthProvider.verifyPhoneNumber(options)
+        val options = PhoneAuthOptions.newBuilder(auth)
+            .setPhoneNumber(formattedPhoneNumber)       // Phone number to verify
+            .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+            .setActivity(this)                 // Activity (for callback binding)
+            .setCallbacks(callbacks)          // OnVerificationStateChangedCallbacks
+            .build()
+            PhoneAuthProvider.verifyPhoneNumber(options)
     }
 
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
@@ -173,7 +171,6 @@ class SendOtp : AppCompatActivity() {
                     startActivity(intent)
                     finish()
                 } else {
-                    Log.d("Ankit",task.exception.toString())
                     Toast.makeText(this, "Account creation failed.", Toast.LENGTH_SHORT).show()
                     auth.signOut()
                 }

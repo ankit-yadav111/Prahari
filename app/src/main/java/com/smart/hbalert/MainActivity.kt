@@ -1,8 +1,10 @@
 package com.smart.hbalert
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
@@ -16,14 +18,22 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
+import com.google.android.gms.fitness.data.DataPoint
+import com.google.android.gms.fitness.data.DataSet
 import com.google.android.gms.fitness.data.DataType
+import com.google.android.gms.fitness.request.DataReadRequest
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.smart.hbalert.contact.ContactViewModel
 import com.smart.hbalert.databinding.ActivityMainBinding
 import com.smart.hbalert.doa.UserDoa
+import java.time.Instant
+import java.time.ZoneId
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,7 +43,19 @@ class MainActivity : AppCompatActivity() {
     var locationManager: LocationManager? = null
     var latitude = 0.0
     var longitude = 0.0
+    var min = 0.0
+    var max = 0.0
     private var flag=0
+    private lateinit var sharedPreferences: SharedPreferences
+    private val GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 1
+    private val TAG = "Ankit"
+    private val runningQOrLater =
+        android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q
+    private val fitnessOptions = FitnessOptions.builder()
+        .addDataType(DataType.TYPE_HEART_RATE_BPM, FitnessOptions.ACCESS_READ)
+        .build()
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,11 +93,16 @@ class MainActivity : AppCompatActivity() {
             flag=1
         }
         if (flag==1){
+            fetchSize()
             locationManager = this.getSystemService(LOCATION_SERVICE) as LocationManager
             locationManager!!.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
-                0, 10f, locationListenerGPS
-        )}
+                0, 10f, locationListenerGPS)
+
+            sharedPreferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
+            min = sharedPreferences.getString("Min", "").toString().toDouble()
+            max = sharedPreferences.getString("Max", "").toString().toDouble()
+        }
 
         binding.login.setOnClickListener{
             auth.signOut()
@@ -86,9 +113,9 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this,ContactActivity::class.java))
         }
 
-        binding.enableAlert.setOnClickListener{
-            enabledAlert()
-        }
+//        binding.enableAlert.setOnClickListener{
+//            enabledAlert()
+//        }
 
         binding.sosMode.setOnClickListener{
             sosMode()
@@ -102,8 +129,18 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this,WatchActivity::class.java))
         }
 
-        fetchSize()
 
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(flag==1){
+            if(min ==0.0 || max==0.0){
+                Toast.makeText(this,"Set the heart rate range",Toast.LENGTH_LONG).show()
+            }else{
+                fitSignIn(GOOGLE_FIT_PERMISSIONS_REQUEST_CODE) }
+        }
     }
 
     private fun sosMode() {
@@ -203,4 +240,89 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
     }
+
+    private fun requestPermissions() {
+        GoogleSignIn.requestPermissions(
+            this, // your activity
+            GOOGLE_FIT_PERMISSIONS_REQUEST_CODE,
+            getGoogleAccount(),
+            fitnessOptions)
+    }
+
+    private fun fitSignIn(requestCode: Int) {
+
+        if (!GoogleSignIn.hasPermissions(getGoogleAccount(), fitnessOptions)) {
+            requestPermissions()
+        } else {
+            Log.d(TAG,"FitSignIn Else")
+            binding.watchStatus.text="Smartband is connected"
+            accessGoogleFit()
+        }
+    }
+    private fun getGoogleAccount() = GoogleSignIn.getAccountForExtension(this, fitnessOptions)
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (resultCode) {
+            Activity.RESULT_OK -> when (requestCode) {
+                GOOGLE_FIT_PERMISSIONS_REQUEST_CODE -> accessGoogleFit()
+                else -> {
+                    // Result wasn't from Google Fit
+                }
+            }
+            else -> {
+                // Permission not granted
+                Toast.makeText(this, "Permission not granted", Toast.LENGTH_LONG).show()
+                requestPermissions()
+            }
+        }
+    }
+
+    private fun accessGoogleFit() {
+
+        val endTime = System.currentTimeMillis()
+        val startTime = endTime - TimeUnit.MINUTES.toMillis(30)
+
+        val readRequest = DataReadRequest.Builder()
+            .aggregate(DataType.TYPE_HEART_RATE_BPM)
+            .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
+            .bucketByTime(1, TimeUnit.DAYS)
+            .build()
+        val account = GoogleSignIn.getAccountForExtension(this, fitnessOptions)
+        Fitness.getHistoryClient(this, account)
+            .readData(readRequest)
+            .addOnSuccessListener { response ->
+                // Use response data here
+                Log.i(TAG, "OnSuccess()")
+                for (dataSet in response.buckets.flatMap { it.dataSets }) {
+                    dumpDataSet(dataSet)
+                }
+            }
+            .addOnFailureListener({ e -> Log.d(TAG, "OnFailure()", e) })
+    }
+    fun dumpDataSet(dataSet: DataSet) {
+        for (dp in dataSet.dataPoints) {
+            Log.i(TAG,"Data point:")
+            Log.i(TAG,"\tStart: ${dp.getStartTimeString()}")
+            Log.i(TAG,"\tEnd: ${dp.getEndTimeString()}")
+            for (field in dp.dataType.fields) {
+                Log.i(TAG,"\tField: ${field.name.toString()} Value: ${dp.getValue(field)}")
+                Log.d(TAG,dp.getValue(field).toString())
+                if(dp.getValue(field).toString().toDouble() < min || dp.getValue(field).toString().toDouble() > max){
+                    Log.d(TAG,"${dp.getValue(field).toString().toDouble()},${min},${max},${dp.getValue(field).toString().toDouble() < min}")
+                    sosMode()
+                     break
+                }
+
+            }
+        }
+    }
+
+    fun DataPoint.getStartTimeString() = Instant.ofEpochSecond(this.getStartTime(TimeUnit.SECONDS))
+        .atZone(ZoneId.systemDefault())
+        .toLocalDateTime().toString()
+
+    fun DataPoint.getEndTimeString() = Instant.ofEpochSecond(this.getEndTime(TimeUnit.SECONDS))
+        .atZone(ZoneId.systemDefault())
+        .toLocalDateTime().toString()
 }

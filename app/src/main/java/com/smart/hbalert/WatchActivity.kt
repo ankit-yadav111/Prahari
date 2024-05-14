@@ -25,9 +25,10 @@ import java.util.concurrent.TimeUnit
 class WatchActivity : AppCompatActivity() {
     private lateinit var binding: ActivityConnectWatchBinding
     private lateinit var sharedPreferences: SharedPreferences
-    private lateinit var mGoogleSignInClient: GoogleSignInClient
     private val GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 1
     private val TAG = "Ankit"
+    private var min = 0
+    private  var max = 0
     private val runningQOrLater =
         android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q
     private val fitnessOptions = FitnessOptions.builder()
@@ -44,9 +45,13 @@ class WatchActivity : AppCompatActivity() {
 
         sharedPreferences = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE)
 
-        val min = sharedPreferences.getString("Min", "").toString()
-        val max = sharedPreferences.getString("Max", "").toString()
-        fitSignIn(GOOGLE_FIT_PERMISSIONS_REQUEST_CODE)
+        min = sharedPreferences.getString("Min", "").toString().toInt()
+        max = sharedPreferences.getString("Max", "").toString().toInt()
+        if(min ==0 || max==0){
+            Toast.makeText(this,"Set the heart rate range",Toast.LENGTH_LONG).show()
+        }else{
+            fitSignIn(GOOGLE_FIT_PERMISSIONS_REQUEST_CODE)
+        }
     }
 
 
